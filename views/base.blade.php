@@ -28,10 +28,15 @@
       @include('errormessage')
     </div>
 
-  @yield('content')
+<div class="row">
+  <div class="col-md-12 push-down">
+    @yield('content')
+  </div>
+</div>
 
   </div>
 
+<footer class="footer">
   <div class="row footer-background">
     <div class="col-md-3">
       <div class="padding-left-8px">
@@ -49,6 +54,7 @@
       <img src="/assets/map-small.png" class="pull-right">
     </div>
   </div>
+</footer>
 
 
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -57,7 +63,14 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous">
   </script>
 
+  @if ((Acme\auth\LoggedIn::user()) && (Acme\auth\LoggedIn::user()->access_level == 2))
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.4/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  @endif
+
   @yield('bottomjs')
+
+  @include('admin.admin-js')
 
 </body>
 
