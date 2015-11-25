@@ -36,6 +36,17 @@ class Validator
                 if (Valid::equals($_REQUEST[$name])->Validate($_REQUEST[$exploded[1]]) == false) {
                     $errors[] = "Value does not match verification value!";
                 }
+                break;
+
+              case 'unique':
+                $model = "Acme\\models\\" . $exploded[1];
+                $table = new $model;
+                $results = $table::where($name, '=', $_REQUEST[$name])->get();
+                foreach ($results as $item)
+                {
+                  $errors[] = $_REQUEST[$name] . " already exists in this system";
+                }
+                break;
 
               default:
                 $errors[] = "No value found";

@@ -1,11 +1,34 @@
 <?php
 
-$router->map('GET', '/', 'Acme\Controllers\PageController@getShowHomePage', 'home');
 
-$router->map('GET', '/register', 'Acme\Controllers\RegisterController@getShowRegisterPage', 'register');
+// register routes
+$router->map('GET', '/register', 'Acme\controllers\RegisterController@getShowRegisterPage', 'register');
+$router->map('POST', '/register', 'Acme\controllers\RegisterController@postShowRegisterPage', 'register_post');
+$router->map('GET', '/verify-account', 'Acme\controllers\RegisterController@getVerifyAccount', 'verify_account');
 
-$router->map('POST', '/register', 'Acme\Controllers\RegisterController@postShowRegisterPage', 'register_post');
+//testimonial routes
+$router->map('GET', '/testimonials', 'Acme\controllers\TestimonialController@getShowTestimonials', 'testimonials');
+// logged in user routes
+if (Acme\auth\LoggedIn::user())
+{
+$router->map('GET', '/add-testimonial', 'Acme\controllers\TestimonialController@getShowAdd', 'add_testimonial');
+$router->map('POST', '/add-testimonial', 'Acme\controllers\TestimonialController@postShowAdd', 'add_testimonial_post');
+}
 
-$router->map('GET', '/login', 'Acme\Controllers\RegisterController@getShowLoginPage', 'login');
+// login logout routes
+$router->map('GET', '/login', 'Acme\controllers\authenticationController@getShowLoginPage', 'login');
+$router->map('POST', '/login', 'Acme\controllers\authenticationController@postShowLoginPage', 'login_post');
+$router->map('GET', '/logout', 'Acme\controllers\authenticationController@getLogout', 'logout');
 
-$router->map('GET', '/about', 'Acme\Controllers\PageController@getShowPage', 'about');
+//admin routes
+if ((Acme\auth\LoggedIn::user()) && (Acme\auth\LoggedIn::user()->access_level == 2))
+{
+  $router->map('POST', '/admin/page/edit', 'Acme\controllers\AdminController@postSavePage', 'save_page');
+  $router->map('GET', '/admin/page/add', 'Acme\controllers\AdminController@getAddPage', 'add_page');
+
+}
+
+// page routes
+$router->map('GET', '/', 'Acme\controllers\PageController@getShowHomePage', 'home');
+$router->map('GET', '/[*]', 'Acme\controllers\PageController@getShowPage', 'about');
+$router->map('GET', '/page-not-found', 'Acme\controllers\PageController@getShow404', '404');
